@@ -6,36 +6,52 @@
  */
 
 plugins {
-    // Apply the java-library plugin for API and implementation separation.
+    // Plugin para trabajar con bibliotecas Java
     `java-library`
+
+    // Plugin de Spring Boot
+    id("org.springframework.boot") version "3.1.4"
+
+    // Plugin para manejo de dependencias de Spring
+    id("io.spring.dependency-management") version "1.1.4"
 }
 
 repositories {
-    // Use Maven Central for resolving dependencies.
+    // Repositorio Maven Central para las dependencias
     mavenCentral()
 }
 
 dependencies {
-    // Use JUnit Jupiter for testing.
-    testImplementation(libs.junit.jupiter)
+    // Starter básico de Spring Boot
+    implementation("org.springframework.boot:spring-boot-starter")
 
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    // Starter para aplicaciones web (opcional)
+    implementation("org.springframework.boot:spring-boot-starter-web")
 
-    // This dependency is exported to consumers, that is to say found on their compile classpath.
+    // Starter para persistencia con JPA y base de datos (opcional)
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    runtimeOnly("org.postgresql:postgresql") // Cambia PostgreSQL por otro driver si usas otra base de datos
+
+    // Dependencias para pruebas con Spring Boot
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+    // Dependencias opcionales existentes en tu proyecto
     api(libs.commons.math3)
-
-    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation(libs.guava)
+
+    // Dependencia para pruebas
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
-// Apply a specific Java toolchain to ease working on different environments.
 java {
+    // Configurar la versión de Java
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion.set(JavaLanguageVersion.of(17)) // Cambia la versión si es necesario
     }
 }
 
 tasks.named<Test>("test") {
-    // Use JUnit Platform for unit tests.
+    // Usar JUnit Platform para pruebas
     useJUnitPlatform()
 }
+
